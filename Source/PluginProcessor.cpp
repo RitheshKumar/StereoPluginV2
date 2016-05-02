@@ -91,7 +91,7 @@ void TestFilterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     biquadF[1][0].calc_filter_coeffs(2,6950,sampleRate,2.1f,-20,true);
     biquadF[1][1].calc_filter_coeffs(2,13550,sampleRate,4.1f,-20,true);
     biquadF[1][2].calc_filter_coeffs(2,20250,sampleRate,5.8f,-20,true);
-    commonF.calc_filter_coeffs(2, 1025, sampleRate, 0.5f, -20, true);
+    commonF.calc_filter_coeffs(0, 1025, sampleRate, 0.5f, -20, true);
 }
 
 void TestFilterAudioProcessor::releaseResources()
@@ -195,7 +195,7 @@ void TestFilterAudioProcessor::setValue(int ID, float freqVal, float qVal, float
                 gainParams[0][1] = gainVal;
                 break;
             case 6:
-                commonF.calc_filter_coeffs(2, freqVal, getSampleRate(), qVal, -20, false);
+                commonF.calc_filter_coeffs(0, freqVal, getSampleRate(), qVal, -20, false);
                 commonG = gainVal;
                 break;
             default:
