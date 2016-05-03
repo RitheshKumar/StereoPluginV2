@@ -8,10 +8,21 @@
               pluginCode="Wsb9" pluginChannelConfigs="" pluginIsSynth="0" pluginWantsMidiIn="0"
               pluginProducesMidiOut="0" pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0"
               pluginAUExportPrefix="TestFilterAU" pluginRTASCategory="" aaxIdentifier="com.yourcompany.TestFilter"
-              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.2.1">
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.2.0">
   <MAINGROUP id="uJhQze" name="TestFilter">
     <GROUP id="{DF5D129E-D463-3C5A-3729-518C686F13F6}" name="Source">
-      <FILE id="rII2tM" name="biquadFilter.h" compile="0" resource="0" file="Source/biquadFilter.h"/>
+      <GROUP id="{B309777D-92E7-DF7C-D7C5-5780BF6878A5}" name="Includes">
+        <FILE id="rII2tM" name="biquadFilter.h" compile="0" resource="0" file="Source/biquadFilter.h"/>
+        <FILE id="zkMQZS" name="dragBox.cpp" compile="1" resource="0" file="Source/dragBox.cpp"/>
+        <FILE id="FI8B0O" name="ErrorDef.h" compile="0" resource="0" file="Source/ErrorDef.h"/>
+        <FILE id="jfLLz3" name="peakBar.cpp" compile="1" resource="0" file="Source/peakBar.cpp"/>
+        <FILE id="JVUIvc" name="PeakProgramMeter.cpp" compile="1" resource="0"
+              file="Source/PeakProgramMeter.cpp"/>
+        <FILE id="hSmHVb" name="PeakProgramMeter.h" compile="0" resource="0"
+              file="Source/PeakProgramMeter.h"/>
+        <FILE id="DvjEiU" name="Synthesis.h" compile="0" resource="0" file="Source/Synthesis.h"/>
+        <FILE id="fKQWoy" name="Util.h" compile="0" resource="0" file="Source/Util.h"/>
+      </GROUP>
       <FILE id="fRBPXP" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="dyTcnN" name="PluginProcessor.h" compile="0" resource="0"
@@ -28,20 +39,20 @@
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="TestFilter"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_core" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_video" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_opengl" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_plugin_client" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../Documents/Juce/newJuce/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../Documents/Juce/newJuce/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
   </EXPORTFORMATS>
