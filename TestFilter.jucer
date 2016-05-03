@@ -29,6 +29,7 @@
             file="Source/PluginProcessor.h"/>
       <FILE id="x4GGWe" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
+      <FILE id="tCnGXW" name="Mono2Stereo.cpp" compile="1" resource="0" file="Source/Mono2Stereo.cpp"/>
       <FILE id="jcDwy3" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
   </MAINGROUP>

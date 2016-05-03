@@ -42,6 +42,12 @@ private:
     bool m_bIsInitialized;
     float** m_ppfFilterBuf;
     float** m_ppfPeak;
+    
+    
+    //for use in process
+    float filterBuf,
+             ppmOut,
+           tempPeak;
 };
 
 #endif /* defined(__Vibrato2Plugin__PeakProgramMeter__) */

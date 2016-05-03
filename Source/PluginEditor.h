@@ -13,6 +13,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "peakBar.cpp"
+#include "dragBox.cpp"
 
 
 //==============================================================================
@@ -37,7 +39,16 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     TestFilterAudioProcessor& processor;
-    Slider freqKnob[7], qKnob[7], gainKnob[7];
+//    Slider freqKnob[7], qKnob[7], gainKnob[7];
+    
+    //GUI declarations
+    peakBar correlationBar,
+    ppmBarL, ppmBarR;
+    ComboBox presetList;
+    dragBox widthSetBox, depthSetBox;
+    
+    Label corrBarLabel;
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TestFilterAudioProcessorEditor)
 };

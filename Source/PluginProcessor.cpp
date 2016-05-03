@@ -13,15 +13,17 @@
 
 
 //==============================================================================
-TestFilterAudioProcessor::TestFilterAudioProcessor()
+TestFilterAudioProcessor::TestFilterAudioProcessor() : _peakVal(new float[2])
 {
 //    for (int i=0; i<7; i++) {
 //        q[i] = 0.5;
-//    } 
+//    }
+    PeakProgramMeter::createInstance(pPPM);
 }
 
 TestFilterAudioProcessor::~TestFilterAudioProcessor()
 {
+    PeakProgramMeter::destroyInstance(pPPM);
 }
 
 //==============================================================================
@@ -92,6 +94,8 @@ void TestFilterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     biquadF[1][1].calc_filter_coeffs(2,13550,sampleRate,4.1f,-20,true);
     biquadF[1][2].calc_filter_coeffs(2,20250,sampleRate,5.8f,-20,true);
     commonF.calc_filter_coeffs(0, 1025, sampleRate, 0.5f, -20, true);
+    
+    pPPM->initInstance(sampleRate, samplesPerBlock, getTotalNumInputChannels());
 }
 
 void TestFilterAudioProcessor::releaseResources()
@@ -116,6 +120,9 @@ void TestFilterAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuff
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
+    
+    
+//    std::cout<<buffer.getArrayOfReadPointers()[0][256]<<", "<<buffer.getArrayOfReadPointers()[1][256]<<";  ";
     const float* inputData   = buffer.getReadPointer(0);//since ours is a mono track
     
     float** channelData = buffer.getArrayOfWritePointers();
@@ -130,6 +137,12 @@ void TestFilterAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuff
                                          + commonG*commonF.filter(inputVal);
         }
 
+    }
+    
+    
+    pPPM->ppmProcess( buffer.getArrayOfReadPointers(), buffer.getNumSamples());
+    for (int channel=0; channel < buffer.getNumChannels(); channel++) {
+        _peakVal[channel] = pPPM->getPeak(channel);
     }
     
 }

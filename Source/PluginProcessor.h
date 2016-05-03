@@ -13,6 +13,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "biquadFilter.h"
+#include "PeakProgramMeter.h"
 
 
 //==============================================================================
@@ -55,6 +56,7 @@ public:
     
     //==============================================================================
     void setValue( int ID, float freqVal, float qVal, float gainVal);
+    float getPeakVal(int channel ){ return _peakVal[channel]; }
 
 private:
     //==============================================================================
@@ -68,6 +70,9 @@ private:
     float gainParams[2][3] = { {  0.4,  0.8,  0.8},
                                {1.4, 1.58, 1.58} }; //centre is 0.8
     float commonG = 0.5;
+    
+    float *_peakVal; //we will store only values for the first 2 channels
+    PeakProgramMeter *pPPM;
 };
 
 

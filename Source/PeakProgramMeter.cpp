@@ -7,6 +7,7 @@
 //
 
 #include "PeakProgramMeter.h"
+#include <iostream>
 
 PeakProgramMeter::PeakProgramMeter() {
     m_bIsInitialized = false;
@@ -75,10 +76,9 @@ Error_t PeakProgramMeter::resetInstance() {
 
 
 Error_t PeakProgramMeter::ppmProcess(const float **ppfInputBuffer, int numOfFrames) {
-    float filterBuf = 0.f;
-    float ppmOut = 0.f;
-    float tempPeak = 0.f;
+    
     for (int i = 0 ; i < m_iNumChannels; i++) {
+        filterBuf = 0.f; ppmOut = 0.f; tempPeak = 0.f;
         for (int j = 0 ; j < numOfFrames; j++) {
             filterBuf = m_ppfFilterBuf[i][0];
             if (filterBuf > fabsf(ppfInputBuffer[i][j])) {
