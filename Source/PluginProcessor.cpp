@@ -13,7 +13,8 @@
 
 
 //==============================================================================
-TestFilterAudioProcessor::TestFilterAudioProcessor() : _peakVal(new float[2])
+TestFilterAudioProcessor::TestFilterAudioProcessor() : _peakVal(new float[2]),
+                                                       _corrCoeff(0.f)
 {
     PeakProgramMeter::createInstance(pPPM);
 }
@@ -110,7 +111,10 @@ void TestFilterAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuff
     // audio processing...
     
     M2S.process(buffer);
+    
+    _corrCoeff = corrCoeff.findCorrCoeff(buffer.getArrayOfReadPointers(), buffer.getNumSamples());
     pPPM->ppmProcess( buffer.getArrayOfReadPointers(), buffer.getNumSamples());
+    
     for (int channel=0; channel < buffer.getNumChannels(); channel++) {
         _peakVal[channel] = pPPM->getPeak(channel);
     }

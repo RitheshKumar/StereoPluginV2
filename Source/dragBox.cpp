@@ -58,6 +58,8 @@ public:
     void setDragVal(float val) { _dragVal = val; }
     void setSlider(bool isSlider){ _isSlider = isSlider; }
     
+    float getDragVal(){ return _dragVal; }
+    
 private:
     float _dragVal;
     bool _isSlider;

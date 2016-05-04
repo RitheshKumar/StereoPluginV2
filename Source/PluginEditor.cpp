@@ -93,6 +93,14 @@ void TestFilterAudioProcessorEditor::timerCallback() {
     ppmBarR.setPeakVal(processor.getPeakVal(1));
     ppmBarR.repaint();
     
+    float val = (processor.getCorrCoeff())/2.f;
+    val = (val<0.f)?0.f:val; val = (val>1.f)?1.f:val;
+    correlationBar.setPeakVal(val);
+    correlationBar.repaint();
+    
+
+    processor.setDelay(depthSetBox.getDragVal());
+    
     processor.preset(presetList.getSelectedId());
     
 }

@@ -39,7 +39,6 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     TestFilterAudioProcessor& processor;
-//    Slider freqKnob[7], qKnob[7], gainKnob[7];
     
     //GUI declarations
     peakBar correlationBar,

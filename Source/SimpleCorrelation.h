@@ -19,29 +19,21 @@
 class SimpleCorrelation  
 {
 public:
-    SimpleCorrelation ( int iMaxBlockSize, int iNumChannels, float fSampleRate );
+    SimpleCorrelation ();
     ~SimpleCorrelation();
     
     //==============================================================================
     
-    void correlate ( const float** inputData, float &freq, float &midiNote, int numSamples );
+    float findCorrCoeff(const float ** data, int numSamples);
 
     //==============================================================================
     
 private:
-    int64 nextSampleNum;
-    int startIndex,endIndex,minIndex, iter;
-
-    float frequency;
-    int _iNumChannels,
-        _iAcfBufLen;
-    float **_ppfAucorr,
-          _fSampleRate,
-          _fFrequency;
-    int curFreq,prevFreq;
 
     //Private Functions
     void reset();
+    float calcCovariance(const float **data, int numSamples);
+    float calcVariance(const float *data, int numSamples);
 
 };
 

@@ -8,77 +8,58 @@
 
 #include "SimpleCorrelation.h"
 
-SimpleCorrelation::SimpleCorrelation( int iMaxBlockSize, int iNumChannels, float fSampleRate )  :
-                                                                                frequency (0.0),
-                                                                               _iNumChannels(iNumChannels),
-                                                                               _iAcfBufLen(2* iMaxBlockSize - 1),
-                                                                               _ppfAucorr( new float*[iNumChannels] ),
-                                                                               _fSampleRate( fSampleRate ),
-                                                                               _fFrequency(0.0f),
-                                                                               curFreq(0),
-                                                                               prevFreq(0)
-{
-
-    iter   = 0;
-
-    for( int c=0; c<iNumChannels; c++ ) {
-        _ppfAucorr[c] = new float[ _iAcfBufLen ];
-    }
-
+SimpleCorrelation::SimpleCorrelation() {
 }
 
 SimpleCorrelation::~SimpleCorrelation() {
-
-    for( int c=0; c<_iNumChannels; c++ ) {
-        delete [] _ppfAucorr[c];
-    }
-    delete [] _ppfAucorr;
-    _ppfAucorr = 0;
-
 }
 
-
-
-void SimpleCorrelation::correlate ( const float** inputData, float &freq, float &midiNote, int numSamples )
-{
-
-    int acfSize = 2*numSamples-1;
-    startIndex = numSamples;
-
-
-
-    for ( int i=numSamples-1,cnt = 0; cnt<numSamples; i--, cnt++ ) {
-        for( int j=0; j<numSamples; j++ ) {
-            _ppfAucorr[0][cnt+j] += inputData[0][i]*inputData[1][j];
-        }
-    }
-
-
-    float maxVal=0.0;
-
-
-    for ( int i = startIndex; i < acfSize - 1; i++ ) {
-        if ( _ppfAucorr[0][i-1] < _ppfAucorr[0][i] && _ppfAucorr[0][i] >= _ppfAucorr[0][i+1] ) {
-            if ( _ppfAucorr[0][i] >= maxVal ) {
-                    maxVal   = _ppfAucorr[0][i];
-                    endIndex = i;
-            }
-        }
-    }
-        
+float SimpleCorrelation::findCorrCoeff(const float ** data, int numSamples) {
     
-    reset(); //This function uses a lot of CPU!!
-
+    float lSD = sqrt(calcVariance(data[0], numSamples));
+    float rSD = sqrt(calcVariance(data[1], numSamples));
+    float coV = calcCovariance(data, numSamples); 
+    return coV/(lSD*rSD);
 }
 
+float SimpleCorrelation::calcVariance(const float *data, int numSamples) {
+    int n = 0;
+    float mean = 0.f,
+          var  = 0.0f,
+          delta;
 
-void SimpleCorrelation::reset() {
-    for ( int c = 0; c < _iNumChannels; c++ ) {
-        for ( int sample = 0; sample < _iAcfBufLen; sample++ ) {
-            _ppfAucorr[c][sample] = 0.0f;
-        }
+    for ( int sample = 0; sample < numSamples; sample++ ) {
+        n++;
+        delta = data[sample] - mean;
+        mean += delta/n;
+        var  += delta*( data[sample] - mean );
     }
+
+    if (n < 2)
+        return NAN;
+    else
+        return var/(n-1);
+    
 }
+
+float SimpleCorrelation::calcCovariance(const float ** data, int numSamples) {
+    float mean1 = 0.0f,
+          mean2 = 0.0f,
+          coVar = 0.0f,
+          delta1, delta2;
+
+    for ( int sample = 0; sample < numSamples; sample++ ) {
+        delta1 = (data[0][sample] - mean1) / (sample + 1);
+        mean1 += delta1;
+        delta2 = (data[1][sample] - mean2) / (sample + 1);
+        mean2 += delta2;
+        coVar += sample*delta1*delta2 - coVar/(sample + 1);
+    }
+
+    return  numSamples/(numSamples - 1.f) * coVar;
+    
+}
+    
 
 
 //____________________________________________________________________________________

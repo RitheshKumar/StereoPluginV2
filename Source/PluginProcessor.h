@@ -15,6 +15,7 @@
 #include "biquadFilter.h"
 #include "PeakProgramMeter.h"
 #include "Mono2Stereo.cpp"
+#include "SimpleCorrelation.h"
 
 
 //==============================================================================
@@ -57,7 +58,9 @@ public:
     
     //==============================================================================
     void setValue( int filterID, float freqVal, float qVal, float gainVal);
+    void setDelay(float delay){  M2S.setDelay(delay); }
     float getPeakVal(int channel ){ return _peakVal[channel]; }
+    float getCorrCoeff(){ return isnan(_corrCoeff)?0:_corrCoeff; }
     void preset(int presetNum);
 
 private:
@@ -74,8 +77,11 @@ private:
     float commonG = 0.5;
     
     float *_peakVal; //we will store only values for the first 2 channels
+    float _corrCoeff;
+    
     PeakProgramMeter *pPPM;
     Mono2Stereo M2S;
+    SimpleCorrelation corrCoeff;
 };
 
 

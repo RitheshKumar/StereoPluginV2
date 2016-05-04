@@ -15,22 +15,88 @@
 #include "biquadFilter.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
-class Mono2Stereo {
-public:
-    Mono2Stereo() {
+struct delayStruct {
+    
+    delayStruct() {
+        
+        delayLine = 0;
+        readIdx = 0; writeIdx = 0;
+        _delay  = 0;
         
     }
-    
-    ~Mono2Stereo() {
+    ~delayStruct() {
+        
+        //Deallocate delayLine
+        for (int c =0; c<2; c++)
+            delete [] delayLine[c];
+        delete [] delayLine;
+        delayLine = 0;
+        
+        delete [] _delay;
     }
     
     void init(int sampleRate) {
+        
         _sampleRate = sampleRate;
+        
+        //Allocate delayLine
+        delayLine  = new float*[2];
+        for (int c =0; c<2; c++)
+            delayLine[c] = new float[sampleRate]; //MaxDelayOneSec.
+        
+        _delay     = new float[2]; _delay[0] = 0.1; _delay[1] = 0.1;
+        
+    }
+    
+    float getDelayVal(float input, int channel) {
+        
+        if( writeIdx >= _sampleRate)
+            writeIdx = 0;
+        
+        delayLine[channel][writeIdx] = input;
+        
+        readIdx = writeIdx - _delay[channel]*_sampleRate;
+        writeIdx++;
+        
+        if( readIdx < 0)
+            readIdx = _sampleRate + readIdx;
+        
+        return delayLine[channel][readIdx];
+    }
+    
+    void setDelay(float delay, int channel) { _delay[channel] = delay; }
+    
+private:
+    float **delayLine, *_delay;
+    int readIdx, writeIdx,
+        _sampleRate;
+    
+};
+
+
+
+class Mono2Stereo {
+public:
+    Mono2Stereo():_dly(new delayStruct) {
+
+    }
+    
+    ~Mono2Stereo() {
+        
+    }
+    
+    void init(int sampleRate) {
+        
+        _sampleRate = sampleRate;
+        
+        _dly->init(sampleRate);
+    
         presetCoeff(1);
 
     }
     
     void process(AudioSampleBuffer &buffer) {
+        
         const float* inputData   = buffer.getReadPointer(0);//since ours is a mono track
         
         float** channelData = buffer.getArrayOfWritePointers();
@@ -41,10 +107,11 @@ public:
                 channelData[channel][sample] = gainParams[channel][0]*biquadF[channel][0].filter(inputVal)
                 + gainParams[channel][1]*biquadF[channel][1].filter(inputVal)
                 + gainParams[channel][2]*biquadF[channel][2].filter(inputVal)
-                + commonG*commonF.filter(inputVal);
+                + commonG*commonF.filter(inputVal) + 0.3*_dly->getDelayVal(inputVal, channel);
             }
             
         }
+
     }
     
     void presetCoeff( int presetID ) {
@@ -57,6 +124,7 @@ public:
                 biquadF[1][1].calc_filter_coeffs(2,13550,_sampleRate,4.1f,-20,true);  gainParams[1][1] = 1.58f;
                 biquadF[1][2].calc_filter_coeffs(2,20250,_sampleRate,5.8f,-20,true);  gainParams[1][2] = 1.58f;
                 commonF.calc_filter_coeffs(0, 1025, _sampleRate, 0.5f, -20, true);    commonG = 0.5f;
+                allPass.calc_filter_coeffs(5, 8000, _sampleRate, 1.0f, -20, true);
                 break;
             case 2:
                 biquadF[0][0].calc_filter_coeffs(2,4113.14,_sampleRate,3.31f,-20,true);    gainParams[0][0] = 0.9857f;
@@ -130,17 +198,28 @@ public:
         }
         
     }
+    
+    void setDelay(float delay){
+        delay /= 5.f;
+        _dly->setDelay(delay,      0);
+        _dly->setDelay(delay+0.01, 1);
+        std::cout<<delay<<"\n";
+    }
+    
 private:
     
     CFxRbjFilter biquadF[2][3],
-                commonF;
+                 commonF,
+                 allPass;
+    delayStruct  *_dly;
     
     float gainParams[2][3] = { {  0.4,  0.8,  0.8},
         {1.4, 1.58, 1.58} }; //centre is 0.8
-    float commonG = 0.5;
-    
+    float commonG = 0.5, _delay = 0.2;
     int _sampleRate;
     
 };
+
+
 
 #endif
