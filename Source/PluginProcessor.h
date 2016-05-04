@@ -58,7 +58,8 @@ public:
     
     //==============================================================================
     void setValue( int filterID, float freqVal, float qVal, float gainVal);
-    void setDelay(float delay){  M2S.setDelay(delay); }
+    void setGain(float gain){  M2S.setGain(gain); }
+    void setWideness(float width){ M2S.setWideness(width); }
     float getPeakVal(int channel ){ return _peakVal[channel]; }
     float getCorrCoeff(){ return isnan(_corrCoeff)?0:_corrCoeff; }
     void preset(int presetNum);

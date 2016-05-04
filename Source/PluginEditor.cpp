@@ -31,6 +31,7 @@ TestFilterAudioProcessorEditor::TestFilterAudioProcessorEditor (TestFilterAudioP
     const char* options[] = { "Default", "Oldies", "Rock", "Classical", nullptr };
     presetList.addItemList(StringArray(options), 1);
     addAndMakeVisible(presetList);
+    presetList.addListener(this);
     
     addAndMakeVisible(widthSetBox); widthSetBox.setSlider(true); //this is just for readability. The default is true.
     addAndMakeVisible(depthSetBox); depthSetBox.setSlider(false);
@@ -97,12 +98,12 @@ void TestFilterAudioProcessorEditor::timerCallback() {
     val = (val<0.f)?0.f:val; val = (val>1.f)?1.f:val;
     correlationBar.setPeakVal(val);
     correlationBar.repaint();
-    
 
-    processor.setDelay(depthSetBox.getDragVal());
-    widthSetBox.getDragVal();
-//    processor.setDelay(widthSetBox.getDragVal());
+    processor.setGain(depthSetBox.getDragVal());
+    processor.setWideness(widthSetBox.getDragVal());
     
+}
+
+void TestFilterAudioProcessorEditor::comboBoxChanged (ComboBox * comboBoxThatHasChanged){
     processor.preset(presetList.getSelectedId());
-    
 }

@@ -106,10 +106,10 @@ public:
             float inputVal = inputData[sample];
 
             for (int channel = 0; channel<2; channel++) { //since we are only handling stereo
-                channelData[channel][sample] = gainParams[channel][0]*biquadF[channel][0].filter(inputVal)
-                + gainParams[channel][1]*biquadF[channel][1].filter(inputVal)
-                + gainParams[channel][2]*biquadF[channel][2].filter(inputVal)
-                + commonG*commonF.filter(inputVal) + 0.3*_dly->getDelayVal(inputVal, channel);
+                channelData[channel][sample] = (gainParams[channel][0] + delGain)*biquadF[channel][0].filter(inputVal)
+                + (gainParams[channel][1] + delGain)*biquadF[channel][1].filter(inputVal)
+                + (gainParams[channel][2] + delGain)*biquadF[channel][2].filter(inputVal)
+                + (commonG + delGain)*commonF.filter(inputVal) + (0.3 + delGain)* _dly->getDelayVal(inputVal, channel);
             }
             
         }
@@ -201,10 +201,20 @@ public:
         
     }
     
-    void setDelay(float delay){
+    void setGain(float delay){
         delay /= 10.f;
         _dly->setDelay(4*delay,      0);
         _dly->setDelay(4*delay+0.01, 1);
+//        std::cout<<"Delay: "<<4*delay<<"\n";
+//        delGain = gain;
+    }
+    
+    void setWideness(float width){
+        float cutOff = 60 + width*965,
+                q    = width*0.4;
+        q = (q<0.05)?0.05:q;
+        commonF.calc_filter_coeffs(0, cutOff, _sampleRate, q, -20, true);
+//        std::cout<<"cutOff: "<<cutOff<<", q: "<<q<<"\n";
     }
     
 private:
@@ -216,7 +226,7 @@ private:
     
     float gainParams[2][3] = { {  0.4,  0.8,  0.8},
         {1.4, 1.58, 1.58} }; //centre is 0.8
-    float commonG = 0.5, _delay = 0.2;
+    float commonG = 0.5, _delay = 0.2,delGain = 0.f;
     int _sampleRate;
     
 };

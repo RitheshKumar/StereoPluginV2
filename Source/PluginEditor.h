@@ -21,7 +21,8 @@
 /**
 */
 class TestFilterAudioProcessorEditor  : public AudioProcessorEditor,
-                                        public Timer
+                                        public Timer,
+                                        public ComboBoxListener
 //                                        public SliderListener
 {
 public:
@@ -33,6 +34,7 @@ public:
     void resized() override;
     
     void timerCallback() override;
+    void comboBoxChanged (ComboBox * comboBoxThatHasChanged) override;
 //    void sliderValueChanged (Slider* slider) override;
 
 private:

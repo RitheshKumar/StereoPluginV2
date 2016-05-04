@@ -57,7 +57,7 @@ public:
     void setDragVal(float val) { _dragVal = val; }
     void setSlider(bool isSlider){ _isSlider = isSlider; }
     
-    float getDragVal(){ std::cout<<_dragVal<<"\n"; return _dragVal; }
+    float getDragVal(){  return _dragVal; }
     
 private:
     float _dragVal;
