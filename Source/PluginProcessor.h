@@ -14,6 +14,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "biquadFilter.h"
 #include "PeakProgramMeter.h"
+#include "Mono2Stereo.cpp"
 
 
 //==============================================================================
@@ -55,8 +56,9 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     //==============================================================================
-    void setValue( int ID, float freqVal, float qVal, float gainVal);
+    void setValue( int filterID, float freqVal, float qVal, float gainVal);
     float getPeakVal(int channel ){ return _peakVal[channel]; }
+    void preset(int presetNum);
 
 private:
     //==============================================================================
@@ -73,6 +75,7 @@ private:
     
     float *_peakVal; //we will store only values for the first 2 channels
     PeakProgramMeter *pPPM;
+    Mono2Stereo M2S;
 };
 
 

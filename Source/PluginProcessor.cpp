@@ -15,9 +15,6 @@
 //==============================================================================
 TestFilterAudioProcessor::TestFilterAudioProcessor() : _peakVal(new float[2])
 {
-//    for (int i=0; i<7; i++) {
-//        q[i] = 0.5;
-//    }
     PeakProgramMeter::createInstance(pPPM);
 }
 
@@ -83,19 +80,10 @@ void TestFilterAudioProcessor::changeProgramName (int index, const String& newNa
 void TestFilterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
-    // initialisation that you need..
-
-//    testFilter.calc_filter_coeffs(0, freq, getSampleRate(), q, -20, true);
-    
-    biquadF[0][0].calc_filter_coeffs(2,400,sampleRate,1.0f,-20,true);
-    biquadF[0][1].calc_filter_coeffs(2,10250,sampleRate,3.1f,-20,true);
-    biquadF[0][2].calc_filter_coeffs(2,16850,sampleRate,5.1f,-20,true);
-    biquadF[1][0].calc_filter_coeffs(2,6950,sampleRate,2.1f,-20,true);
-    biquadF[1][1].calc_filter_coeffs(2,13550,sampleRate,4.1f,-20,true);
-    biquadF[1][2].calc_filter_coeffs(2,20250,sampleRate,5.8f,-20,true);
-    commonF.calc_filter_coeffs(0, 1025, sampleRate, 0.5f, -20, true);
+    // initialisation that you need.
     
     pPPM->initInstance(sampleRate, samplesPerBlock, getTotalNumInputChannels());
+    M2S.init(sampleRate);
 }
 
 void TestFilterAudioProcessor::releaseResources()
@@ -121,25 +109,7 @@ void TestFilterAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuff
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     
-    
-//    std::cout<<buffer.getArrayOfReadPointers()[0][256]<<", "<<buffer.getArrayOfReadPointers()[1][256]<<";  ";
-    const float* inputData   = buffer.getReadPointer(0);//since ours is a mono track
-    
-    float** channelData = buffer.getArrayOfWritePointers();
-    for (int sample =0; sample< buffer.getNumSamples(); sample++ ) {
-        float inputVal = inputData[sample];
-//        channelData[0][sample] = testFilter.filter(inputVal);
-//        channelData[1][sample] = channelData[0][sample];
-        for (int channel = 0; channel<2; channel++) {
-            channelData[channel][sample] = gainParams[channel][0]*biquadF[channel][0].filter(inputVal)
-                                         + gainParams[channel][1]*biquadF[channel][1].filter(inputVal)
-                                         + gainParams[channel][2]*biquadF[channel][2].filter(inputVal)
-                                         + commonG*commonF.filter(inputVal);
-        }
-
-    }
-    
-    
+    M2S.process(buffer);
     pPPM->ppmProcess( buffer.getArrayOfReadPointers(), buffer.getNumSamples());
     for (int channel=0; channel < buffer.getNumChannels(); channel++) {
         _peakVal[channel] = pPPM->getPeak(channel);
@@ -179,45 +149,12 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new TestFilterAudioProcessor();
 }
 
-void TestFilterAudioProcessor::setValue(int ID, float freqVal, float qVal, float gainVal) {
+void TestFilterAudioProcessor::setValue(int filterID, float freqVal, float qVal, float gainVal) {
     
-    if (freqVal>2 && qVal > 0.2f && gainVal > 0) {
-        switch (ID) {
-            case 0:
-                biquadF[0][0].calc_filter_coeffs(2, freqVal, getSampleRate(), qVal, -20, false);
-                gainParams[0][0] = gainVal;
-                break;
-            case 1:
-                biquadF[0][1].calc_filter_coeffs(2, freqVal, getSampleRate(), qVal, -20, false);
-                gainParams[0][1] = gainVal;
-                break;
-            case 2:
-                biquadF[0][2].calc_filter_coeffs(2, freqVal, getSampleRate(), qVal, -20, false);
-                gainParams[0][1] = gainVal;
-                break;
-            case 3:
-                biquadF[1][0].calc_filter_coeffs(2, freqVal, getSampleRate(), qVal, -20, false);
-                gainParams[0][1] = gainVal;
-                break;
-            case 4:
-                biquadF[1][1].calc_filter_coeffs(2, freqVal, getSampleRate(), qVal, -20, false);
-                gainParams[0][1] = gainVal;
-                break;
-            case 5:
-                biquadF[1][2].calc_filter_coeffs(2, freqVal, getSampleRate(), qVal, -20, false);
-                gainParams[0][1] = gainVal;
-                break;
-            case 6:
-                commonF.calc_filter_coeffs(0, freqVal, getSampleRate(), qVal, -20, false);
-                commonG = gainVal;
-                break;
-            default:
-                break;
-        }
-    }
+    M2S.setParam(filterID, freqVal, qVal, gainVal);
+    
+}
 
-//    if (freq > 2 && q > 0.2f) {
-//        testFilter.calc_filter_coeffs(0, freq, getSampleRate(), q, -20, false);
-//    }
-    
+void TestFilterAudioProcessor::preset(int presetNum) {
+    M2S.presetCoeff(presetNum);
 }

@@ -11,6 +11,8 @@
 #ifndef BIQUADFILTER_H_INCLUDED
 #define BIQUADFILTER_H_INCLUDED
 
+#include <math.h>
+
 class CFxRbjFilter
 {
 public:

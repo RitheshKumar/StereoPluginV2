@@ -115,6 +115,8 @@ void TestFilterAudioProcessorEditor::timerCallback() {
     ppmBarR.setPeakVal(processor.getPeakVal(1));
     ppmBarR.repaint();
     
+    processor.preset(presetList.getSelectedId());
+    
 //    switch (presetList.getSelectedId()) {
 //        case 1:
 //            std::cout<<"Oldies\n";
