@@ -40,10 +40,9 @@ public:
             
             _dragVal = (_dragVal < 0.066f)?0.066f:_dragVal;
             _dragVal = (_dragVal > 0.990f)?0.990f:_dragVal;
-            _dragVal *= 3.14/2;
             Path filledArc;
             filledArc.addPieSegment(r.getTopLeft().getX(), r.getTopLeft().getY(), r.getWidth(), r.getHeight()*2,
-                                    - _dragVal,  + _dragVal, 0);
+                                    - _dragVal*3.14/2,  + _dragVal*3.14/2, 0);
             g.fillPath (filledArc);
             
             
@@ -58,7 +57,7 @@ public:
     void setDragVal(float val) { _dragVal = val; }
     void setSlider(bool isSlider){ _isSlider = isSlider; }
     
-    float getDragVal(){ return _dragVal; }
+    float getDragVal(){ std::cout<<_dragVal<<"\n"; return _dragVal; }
     
 private:
     float _dragVal;

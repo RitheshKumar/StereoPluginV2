@@ -41,8 +41,10 @@ struct delayStruct {
         
         //Allocate delayLine
         delayLine  = new float*[2];
-        for (int c =0; c<2; c++)
+        for (int c =0; c<2; c++) {
             delayLine[c] = new float[sampleRate]; //MaxDelayOneSec.
+            memset(delayLine[c],0,sampleRate);
+        }
         
         _delay     = new float[2]; _delay[0] = 0.1; _delay[1] = 0.1;
         
@@ -124,7 +126,6 @@ public:
                 biquadF[1][1].calc_filter_coeffs(2,13550,_sampleRate,4.1f,-20,true);  gainParams[1][1] = 1.58f;
                 biquadF[1][2].calc_filter_coeffs(2,20250,_sampleRate,5.8f,-20,true);  gainParams[1][2] = 1.58f;
                 commonF.calc_filter_coeffs(0, 1025, _sampleRate, 0.5f, -20, true);    commonG = 0.5f;
-                allPass.calc_filter_coeffs(5, 8000, _sampleRate, 1.0f, -20, true);
                 break;
             case 2:
                 biquadF[0][0].calc_filter_coeffs(2,4113.14,_sampleRate,3.31f,-20,true);    gainParams[0][0] = 0.9857f;
@@ -159,6 +160,7 @@ public:
             default:
                 break;
         }
+        _dly->setDelay(0.2, 0); _dly->setDelay(0.2, 1);
     }
     
     void setParam( int ID, float freqVal, float qVal, float gainVal) {
@@ -200,10 +202,9 @@ public:
     }
     
     void setDelay(float delay){
-        delay /= 5.f;
-        _dly->setDelay(delay,      0);
-        _dly->setDelay(delay+0.01, 1);
-        std::cout<<delay<<"\n";
+        delay /= 10.f;
+        _dly->setDelay(4*delay,      0);
+        _dly->setDelay(4*delay+0.01, 1);
     }
     
 private:

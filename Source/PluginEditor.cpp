@@ -28,7 +28,7 @@ TestFilterAudioProcessorEditor::TestFilterAudioProcessorEditor (TestFilterAudioP
     addAndMakeVisible(ppmBarL); ppmBarL.setVertical(true);
     addAndMakeVisible(ppmBarR); ppmBarR.setVertical(true);
     
-const char* options[] = { "Default", "Oldies", "Rock", "Classical", nullptr };
+    const char* options[] = { "Default", "Oldies", "Rock", "Classical", nullptr };
     presetList.addItemList(StringArray(options), 1);
     addAndMakeVisible(presetList);
     
@@ -100,6 +100,8 @@ void TestFilterAudioProcessorEditor::timerCallback() {
     
 
     processor.setDelay(depthSetBox.getDragVal());
+    widthSetBox.getDragVal();
+//    processor.setDelay(widthSetBox.getDragVal());
     
     processor.preset(presetList.getSelectedId());
     
