@@ -26,7 +26,7 @@ public:
     
     void init(int sampleRate) {
         _sampleRate = sampleRate;
-        presetCoeff(5);
+        presetCoeff(1);
 
     }
     
@@ -50,23 +50,45 @@ public:
     void presetCoeff( int presetID ) {
         switch (presetID) {
             case 1:
-                biquadF[0][0].calc_filter_coeffs(2,400,_sampleRate,1.0f,-20,true);
-                biquadF[0][1].calc_filter_coeffs(2,10250,_sampleRate,3.1f,-20,true);
-                biquadF[0][2].calc_filter_coeffs(2,16850,_sampleRate,5.1f,-20,true);
-                biquadF[1][0].calc_filter_coeffs(2,6950,_sampleRate,2.1f,-20,true);
-                biquadF[1][1].calc_filter_coeffs(2,13550,_sampleRate,4.1f,-20,true);
-                biquadF[1][2].calc_filter_coeffs(2,20250,_sampleRate,5.8f,-20,true);
-                commonF.calc_filter_coeffs(0, 1025, _sampleRate, 0.5f, -20, true);
+                biquadF[0][0].calc_filter_coeffs(2,400,_sampleRate,1.0f,-20,true);    gainParams[0][0] = 0.8f;
+                biquadF[0][1].calc_filter_coeffs(2,10250,_sampleRate,3.1f,-20,true);  gainParams[0][1] = 1.6f;
+                biquadF[0][2].calc_filter_coeffs(2,16850,_sampleRate,5.1f,-20,true);  gainParams[0][2] = 1.6f;
+                biquadF[1][0].calc_filter_coeffs(2,6950,_sampleRate,2.1f,-20,true);   gainParams[1][0] = 1.4f;
+                biquadF[1][1].calc_filter_coeffs(2,13550,_sampleRate,4.1f,-20,true);  gainParams[1][1] = 1.58f;
+                biquadF[1][2].calc_filter_coeffs(2,20250,_sampleRate,5.8f,-20,true);  gainParams[1][2] = 1.58f;
+                commonF.calc_filter_coeffs(0, 1025, _sampleRate, 0.5f, -20, true);    commonG = 0.5f;
+                break;
+            case 2:
+                biquadF[0][0].calc_filter_coeffs(2,4113.14,_sampleRate,3.31f,-20,true);    gainParams[0][0] = 0.9857f;
+                biquadF[0][1].calc_filter_coeffs(2,9416.04,_sampleRate,2.81f,-20,true);    gainParams[0][1] = 0.7442f;
+                biquadF[0][2].calc_filter_coeffs(2,17196.3,_sampleRate,2.58f,-20,true);    gainParams[0][2] = 0.3249f;
+                biquadF[1][0].calc_filter_coeffs(2,5084.58,_sampleRate,3.17f,-20,true);    gainParams[1][0] = 0.9892f;
+                biquadF[1][1].calc_filter_coeffs(2,12493.03,_sampleRate,2.69f,-20,true);   gainParams[1][1] = 0.7686f;
+                biquadF[1][2].calc_filter_coeffs(2,17363.7,_sampleRate,3.17f,-20,true);    gainParams[1][2] = 0.3589f;
+                commonF.calc_filter_coeffs(0, 1541.6, _sampleRate, 3.28f, -20, true);      commonG = 0.8273f;
+                break;
+                
+            case 3:
+                biquadF[0][0].calc_filter_coeffs(2,3446.01,_sampleRate,3.31f,-20,true);    gainParams[0][0] = 1.0319f;
+                biquadF[0][1].calc_filter_coeffs(2,10770.58,_sampleRate,1.81f,-20,true);   gainParams[0][1] = 0.8194f;
+                biquadF[0][2].calc_filter_coeffs(2,16450.77,_sampleRate,2.58f,-20,true);   gainParams[0][2] = 0.3249f;
+                biquadF[1][0].calc_filter_coeffs(2,7261.96,_sampleRate,3.17f,-20,true);    gainParams[1][0] = 1.0287f;
+                biquadF[1][1].calc_filter_coeffs(2,13316.24,_sampleRate,2.69f,-20,true);   gainParams[1][1] = 0.8033f;
+                biquadF[1][2].calc_filter_coeffs(2,17367.51,_sampleRate,4.57f,-20,true);   gainParams[1][2] = 0.8114f;
+                commonF.calc_filter_coeffs(0, 1728.73, _sampleRate, 1.39f, -20, true);     commonG = 0.8273f;
+                break;
+                
+            case 4:
+                biquadF[0][0].calc_filter_coeffs(2,4000,_sampleRate,2.26f,-20,true);     gainParams[0][0] = 0.3266f;
+                biquadF[0][1].calc_filter_coeffs(2,9000,_sampleRate,0.61f,-20,true);     gainParams[0][1] = 0.4648f;
+                biquadF[0][2].calc_filter_coeffs(2,16000,_sampleRate,1.78f,-20,true);    gainParams[0][2] = 0.8287f;
+                biquadF[1][0].calc_filter_coeffs(2,3891.73,_sampleRate,1.38f,-20,true);  gainParams[1][0] = 0.3014f;
+                biquadF[1][1].calc_filter_coeffs(2,13000,_sampleRate,1.04f,-20,true);    gainParams[1][1] = 0.5697f;
+                biquadF[1][2].calc_filter_coeffs(2,17000,_sampleRate,4.84f,-20,true);    gainParams[1][2] = 0.8508f;
+                commonF.calc_filter_coeffs(0, 87.46, _sampleRate, 0.85f, -20, true);     commonG = 0.8258f;
                 break;
                 
             default:
-                biquadF[0][0].calc_filter_coeffs(2,400,_sampleRate,1.0f,-20,true);
-                biquadF[0][1].calc_filter_coeffs(2,10250,_sampleRate,3.1f,-20,true);
-                biquadF[0][2].calc_filter_coeffs(2,16850,_sampleRate,5.1f,-20,true);
-                biquadF[1][0].calc_filter_coeffs(2,6950,_sampleRate,2.1f,-20,true);
-                biquadF[1][1].calc_filter_coeffs(2,13550,_sampleRate,4.1f,-20,true);
-                biquadF[1][2].calc_filter_coeffs(2,20250,_sampleRate,5.8f,-20,true);
-                commonF.calc_filter_coeffs(0, 1025, _sampleRate, 0.5f, -20, true);
                 break;
         }
     }

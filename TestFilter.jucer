@@ -20,6 +20,10 @@
               file="Source/PeakProgramMeter.cpp"/>
         <FILE id="hSmHVb" name="PeakProgramMeter.h" compile="0" resource="0"
               file="Source/PeakProgramMeter.h"/>
+        <FILE id="T5lLLB" name="SimpleCorrelation.cpp" compile="1" resource="0"
+              file="Source/SimpleCorrelation.cpp"/>
+        <FILE id="MabjYP" name="SimpleCorrelation.h" compile="0" resource="0"
+              file="Source/SimpleCorrelation.h"/>
         <FILE id="DvjEiU" name="Synthesis.h" compile="0" resource="0" file="Source/Synthesis.h"/>
         <FILE id="fKQWoy" name="Util.h" compile="0" resource="0" file="Source/Util.h"/>
       </GROUP>

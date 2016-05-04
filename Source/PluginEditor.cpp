@@ -18,18 +18,6 @@ TestFilterAudioProcessorEditor::TestFilterAudioProcessorEditor (TestFilterAudioP
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-//    setSize (400, 620);
-    
-    
-//    for (int i = 0; i<7; i++) {
-//        freqKnob[i].setRange(0, 20000);
-//        freqKnob[i].setSkewFactorFromMidPoint(1200);
-//        addAndMakeVisible(freqKnob[i]);
-//        qKnob[i].setRange(0, 10);
-//        addAndMakeVisible(qKnob[i]);
-//        gainKnob[i].setRange(0,2.0);
-//        addAndMakeVisible(gainKnob[i]);
-//    }
     
     setSize (800, 600);
     
@@ -40,7 +28,7 @@ TestFilterAudioProcessorEditor::TestFilterAudioProcessorEditor (TestFilterAudioP
     addAndMakeVisible(ppmBarL); ppmBarL.setVertical(true);
     addAndMakeVisible(ppmBarR); ppmBarR.setVertical(true);
     
-    const char* options[] = { "Oldies", "Rock", "Classical", nullptr };
+const char* options[] = { "Default", "Oldies", "Rock", "Classical", nullptr };
     presetList.addItemList(StringArray(options), 1);
     addAndMakeVisible(presetList);
     
@@ -58,11 +46,6 @@ TestFilterAudioProcessorEditor::~TestFilterAudioProcessorEditor()
 //==============================================================================
 void TestFilterAudioProcessorEditor::paint (Graphics& g)
 {
-//    g.fillAll (Colours::white);
-//
-//    g.setColour (Colours::black);
-//    g.setFont (15.0f);
-//    g.drawFittedText ("Hello World!", getLocalBounds(), Justification::centred, 1);
     
     g.fillAll (Colours::white);
     
@@ -73,17 +56,14 @@ void TestFilterAudioProcessorEditor::paint (Graphics& g)
     g.drawText("-1", 20, 520, 30, 10, true);
     g.drawText("0", getWidth()/2-10, 520, 30, 10, true);
     g.drawText("+1", getWidth()-40, 520, 30, 10, true);
+    
 }
 
 void TestFilterAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-//    for (int i=0; i<7; i++) {
-//        freqKnob[i].setBounds(0, 20 + i*85, getWidth(), 40);
-//        qKnob[i].setBounds(0, 40 + i*85, getWidth(), 40);
-//        gainKnob[i].setBounds(0, 60 + i*85, getWidth(), 40);
-//    }
+
     Rectangle<int> r (getLocalBounds().reduced (8));
     
     Rectangle<int> barArea ( r.removeFromBottom(120));
@@ -106,9 +86,7 @@ void TestFilterAudioProcessorEditor::resized()
 }
 
 void TestFilterAudioProcessorEditor::timerCallback() {
-//    for (int i=0; i<7; i++) {
-//        processor.setValue(i, freqKnob[i].getValue(), qKnob[i].getValue(), gainKnob[i].getValue());
-//    }
+
     ppmBarL.setPeakVal(processor.getPeakVal(0));
     ppmBarL.repaint();
     
@@ -117,29 +95,4 @@ void TestFilterAudioProcessorEditor::timerCallback() {
     
     processor.preset(presetList.getSelectedId());
     
-//    switch (presetList.getSelectedId()) {
-//        case 1:
-//            std::cout<<"Oldies\n";
-//            break;
-//        case 2:
-//            std::cout<<"Rock\n";
-//            break;
-//        case 3:
-//            std::cout<<"Classical\n";
-//            break;
-//        default:
-//            break;
-//    }
 }
-
-//void TestFilterAudioProcessorEditor::sliderValueChanged(Slider* slider) {
-//
-//    for (int i=0; i<7; i++) {
-//        i f (slider == &freqKnob[i] || slider == &qKnob[i]) {
-//            processor.setValue(i, freqKnob[i].getValue(), qKnob[i].getValue());
-//            
-//        }
-//        break;
-//    }
-//    
-//}
